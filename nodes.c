@@ -105,12 +105,8 @@ void insert_node_cmd(node **head) // B
 		temp = temp->next;
 	}
 
-	node *new_node = NULL;
-	if ((new_node = (node *)malloc(sizeof(node))) == NULL)
-	{
-		printf("Not enough memory, exit program\n");
-		exit(-1);
-	}
+	node *new_node = calloc(1, sizeof(node));
+	
 	// flag_exist = 0: not exist
 	if (flag_exist == 0)
 	{
@@ -153,12 +149,7 @@ void insert_node_cmd(node **head) // B
 		}
 
 		// create edge
-		edge *new_edge = NULL;
-		if ((new_edge = (edge *)malloc(sizeof(edge))) == NULL)
-		{
-			printf("Not enough memory, exit program\n");
-			exit(-1);
-		}
+		edge *new_edge = calloc(1, sizeof(edge));
 
 		new_edge->endpoint = endpoint;
 		new_edge->weight = w;
@@ -494,6 +485,7 @@ void TSP_cmd(node *head)
 	printf("TSP shortest path: %d \n", x); //space?
 	free(arr);
 	arr = NULL;
+	min_path = NULL;
 }
 
 /**************************************************************************************************************************************/
