@@ -407,7 +407,8 @@ void dijkstra(node *head, int start, int end) {
 			if (temp->delta == INF) {
 				temp->delta = -1;
 			}
-            printf("Dijkstra shortest path: %d\n", temp->delta); // space or not spcae??
+            printf("Dijkstra shortest path: %d ", temp->delta); // space or not spcae??
+			printf("\n");
 	}
 }
 
@@ -504,7 +505,8 @@ void TSP_cmd(node *head)
 	if (x == INF) {
 		x = -1;
 	}
-	printf("TSP shortest path: %d\n", x); //space?
+	printf("TSP shortest path: %d ", x); //space?
+	printf("\n");
 	free(arr);
 	arr = NULL;
 	min_path = NULL;
