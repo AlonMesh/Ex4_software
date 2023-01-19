@@ -16,6 +16,17 @@ char build_graph_cmd(node **head) // A
 		return 'k';
 	}
 
+	if ((*head) == NULL)
+	{
+		(*head) = (node *)malloc(sizeof(node));
+
+		if ((*head) == NULL)
+		{
+			printf("Memory allocation failed!\n");
+			exit(-1);
+		}
+	}
+
 	// Setting the first node (node 0) manually
 	(*head)->node_num = 0;
 	(*head)->edges = NULL;
@@ -224,27 +235,36 @@ void delete_node_cmd(node **head) // D
 			edge *tail;
 			tail = temp_no->edges;
 
-			while (tail->next->next != NULL)
-			{
+			while (tail->next != NULL && tail->next->endpoint->node_num != data_delete) {
 				tail = tail->next;
 			}
-			edge *last = tail->next;
-			tail->next = NULL;
-			free(last);
-			last = NULL;
-		}
 
+			if (tail->next != NULL) {
+				edge *last = tail->next;
+				tail->next = NULL;
+				free(last);
+				last = NULL;
+			}
+		}
 		temp_no = temp_no->next;
 	}
 	
 	temp_no = *head;
-
-	if (temp_no->node_num == data_delete)
+if (temp_no->node_num == data_delete)
 	{
 		node *del_point_node;
 		del_point_node = temp_no;
 		(*head) = (*head)->next;
 		temp_no = temp_no->next;
+
+		edge *deledge = del_point_node->edges;
+
+		while (deledge != NULL)
+		{
+			edge *tmpedgedel = deledge;
+			deledge = deledge->next;
+			free(tmpedgedel);
+		}
 
 		free(del_point_node);
 		del_point_node = NULL;
@@ -258,6 +278,14 @@ void delete_node_cmd(node **head) // D
 				node *del_point_node;
 				del_point_node = temp_no->next;
 				temp_no->next = temp_no->next->next;
+				edge *deledge = del_point_node->edges;
+
+				while (deledge != NULL)
+				{
+					edge *tmpedgedel = deledge;
+					deledge = deledge->next;
+					free(tmpedgedel);
+				}
 				free(del_point_node);
 				del_point_node = NULL;
 				break;
@@ -376,6 +404,9 @@ void dijkstra(node *head, int start, int end) {
     if (temp == NULL) {
         printf("-1\n");
     } else {
+			if (temp->delta == INF) {
+				temp->delta = -1;
+			}
             printf("Dijkstra shortest path: %d \n", temp->delta); // space or not spcae??
 	}
 }

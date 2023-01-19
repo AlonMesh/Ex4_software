@@ -75,8 +75,8 @@ int main()
 				}
 				
 				head = tempHead;
-				free(tempHead);
-				tempHead = NULL;
+				// free(tempHead);
+				// tempHead = NULL;
 
 				n_n = build_graph_cmd(&head);
 				// Assumed that input is correct
@@ -110,6 +110,7 @@ int main()
 
 	//cmd_print_graph(head); // for self bebugging
 
-	//free(head);
+	free(head);
+	head = NULL;
 	return 0;
 }
