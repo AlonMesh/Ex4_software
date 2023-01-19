@@ -505,8 +505,7 @@ void TSP_cmd(node *head)
 	if (x == INF) {
 		x = -1;
 	}
-	printf("TSP shortest path: %d ", x); //space?
-	printf("\n");
+	printf("TSP shortest path: %d \n", x); //space?
 	free(arr);
 	arr = NULL;
 	min_path = NULL;
