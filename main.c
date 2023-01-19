@@ -65,9 +65,8 @@ int main()
 			{
 				// If the graph is already built, deleting the exists one
 				deleteGraph_cmd(&head);
-				free(head);
-				head = NULL;
-
+				//free(head);
+				
 				node *tempHead = (node *)malloc(sizeof(node));
 				if (tempHead == NULL)
 				{
@@ -80,6 +79,7 @@ int main()
 				tempHead = NULL;
 
 				n_n = build_graph_cmd(&head);
+				// Assumed that input is correct
 			}
 		}
 
@@ -107,6 +107,9 @@ int main()
 
 	// Free the leaked memory
 	deleteGraph_cmd(&head);
-	free(head);
+
+	//cmd_print_graph(head); // for self bebugging
+
+	//free(head);
 	return 0;
 }

@@ -31,6 +31,7 @@ char build_graph_cmd(node **head) // A
 		Neighbor_node->node_num = i;
 		Neighbor_node->edges = NULL;
 		Neighbor_node->next = NULL;
+		Neighbor_node->delta = 0;
 		temp->next = Neighbor_node;
 		temp = temp->next;
 	}
@@ -64,7 +65,7 @@ char build_graph_cmd(node **head) // A
 
 			Neighbor_ed->endpoint = endpoint;
 			Neighbor_ed->weight = w;
-
+			Neighbor_ed->next = NULL;
 
 			// Adding the created edge to the current node
 			*next = Neighbor_ed;
@@ -81,8 +82,7 @@ void insert_node_cmd(node **head) // B
 {
 	int new_node_data; // the new data
 	scanf(" %d", &new_node_data);
-	node *temp;
-	temp = *head;
+	node *temp = *head;
 	int flag_exist = 0;
 	// chack if its exist
 	while (temp != NULL && flag_exist == 0)
@@ -96,13 +96,15 @@ void insert_node_cmd(node **head) // B
 		temp = temp->next;
 	}
 
-	node *new_node = calloc(1, sizeof(node));
+	node *new_node = (node *) malloc(sizeof(node));
 	
 	// flag_exist = 0: not exist
 	if (flag_exist == 0)
 	{
 		new_node->node_num = new_node_data;
 		new_node->edges = NULL;
+		new_node->next = NULL;
+		new_node->delta = 0;
 
 		temp = *head;
 
@@ -115,6 +117,8 @@ void insert_node_cmd(node **head) // B
 
 	else
 	{
+		free(new_node);
+		new_node = NULL;
 		new_node = temp;
 		new_node->node_num = new_node_data;
 
@@ -140,10 +144,11 @@ void insert_node_cmd(node **head) // B
 		}
 
 		// create edge
-		edge *new_edge = calloc(1, sizeof(edge));
+		edge *new_edge = (edge *) malloc(sizeof(edge));
 
 		new_edge->endpoint = endpoint;
 		new_edge->weight = w;
+		new_edge->next = NULL;
 
 		// add edge
 		new_edge->next = new_node->edges;
@@ -275,19 +280,19 @@ void deleteGraph_cmd(node **head) {
             del_ed = temp_ed;
             temp_ed = temp_ed->next;
             free(del_ed);
+			del_ed = NULL;
         }
 
         del_point_node = temp_no;
         temp_no = temp_no->next;
 
-        // Remove the node from the graph
-        if (del_point_node != *head) {
-            free(del_point_node);
-        }
+        free(del_point_node);
+		del_point_node = NULL;
+
     }
 
     // Reset the head pointer
-    head = NULL;
+    *head = NULL;
 }
 
 // A function that scans inputs and send to dijkstra
@@ -365,6 +370,7 @@ void dijkstra(node *head, int start, int end) {
         temp = temp->next;
     }
 	free(heap);
+	heap = NULL;
     if (temp == NULL) {
         printf("-1\n");
     } else {
@@ -375,7 +381,7 @@ void dijkstra(node *head, int start, int end) {
 int dijkstraInteger(node *head, int start, int end) {
     node *temp = head;
     int numNodes = 0;
-    while(temp != NULL){
+    while(temp != NULL) {
         numNodes++;
         temp = temp->next;
     }
@@ -438,6 +444,7 @@ int dijkstraInteger(node *head, int start, int end) {
     }
 
 	free(heap);
+	heap = NULL;
     if (temp == NULL) {
         return -1;
     } else {
