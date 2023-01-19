@@ -198,10 +198,6 @@ void delete_node_cmd(node **head) // D
 		edge *temp_ed;
 		temp_ed = temp_no->edges;
 
-		if (temp_ed == NULL) {
-			printf("Node %d is null\n", temp_no->node_num);
-		}
-
 		// Head case - when the first element in the LinkedList shall be removed
 		if (temp_ed->endpoint != NULL && data_delete == temp_ed->endpoint->node_num)
 		{
@@ -407,7 +403,7 @@ void dijkstra(node *head, int start, int end) {
 			if (temp->delta == INF) {
 				temp->delta = -1;
 			}
-            printf("Dijkstra shortest path: %d \n", temp->delta);
+            printf("Dijsktra shortest path: %d \n", temp->delta);
 	}
 }
 
