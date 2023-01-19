@@ -169,24 +169,26 @@ void delete_node_cmd(node **head) // D
 	// Delete the edges that theirs enpoints is the deleted Node.
 	while (temp_no != NULL)
 	{
-
 		// Checks an edge case when a Node (or several) has no edges. 
 		if (temp_no->edges == NULL) {
 			while (temp_no->edges == NULL) {
 				temp_no = temp_no->next;
 
 				if (temp_no == NULL) {
+					printf("broke\n");
 					break;
 				}
 			}
 		}
-
+		if (temp_no == NULL) {
+			break;
+		}
 
 		edge *temp_ed;
 		temp_ed = temp_no->edges;
 
 		if (temp_ed == NULL) {
-			printf("Node %d is nulll\n", temp_no->node_num);
+			printf("Node %d is null\n", temp_no->node_num);
 		}
 
 		// Head case - when the first element in the LinkedList shall be removed
@@ -216,7 +218,7 @@ void delete_node_cmd(node **head) // D
 			temp_ed = temp_ed->next;
 		}
 
-		// Tead case - when the last elemnt in the LinkedList shall be removed
+		// Tail case - when the last elemnt in the LinkedList shall be removed
 		if (temp_ed->next != NULL && data_delete == temp_ed->next->endpoint->node_num)
 		{
 			edge *tail;
@@ -234,7 +236,7 @@ void delete_node_cmd(node **head) // D
 
 		temp_no = temp_no->next;
 	}
-
+	
 	temp_no = *head;
 
 	if (temp_no->node_num == data_delete)
