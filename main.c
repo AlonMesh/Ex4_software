@@ -1,4 +1,5 @@
 #include "header.h"
+
 void cmd_print_graph(node *head)
 {
 	edge *currEdge = NULL;
@@ -49,19 +50,23 @@ int main()
 
 	int is_first = 1;
 
+	// Several chars can recived, each send to an unique function
+	// Scanning input till it is over
 	while ((scanf(" %c", &n_n) != -1 && n_n != 'n'))
 	{
 		if (n_n == 'A')
 		{
 			if (is_first == 1)
 			{
-
 				n_n = build_graph_cmd(&head);
 				is_first = 0;
 			}
 			else
 			{
+				// If the graph is already built, deleting the exists one
 				deleteGraph_cmd(&head);
+				free(head);
+				head = NULL;
 
 				node *tempHead = (node *)malloc(sizeof(node));
 				if (tempHead == NULL)
@@ -70,14 +75,11 @@ int main()
 					exit(-1);
 				}
 				
-				free(head);
 				head = tempHead;
+				free(tempHead);
+				tempHead = NULL;
 
 				n_n = build_graph_cmd(&head);
-				if (n_n == 'n')
-				{
-					return 0;
-				}
 			}
 		}
 
@@ -101,9 +103,10 @@ int main()
 		}
 	}
 
-	//cmd_print_graph(head);
+	//cmd_print_graph(head); // for self bebugging
 
+	// Free the leaked memory
+	deleteGraph_cmd(&head);
 	free(head);
-
 	return 0;
 }

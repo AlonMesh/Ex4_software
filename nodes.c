@@ -1,38 +1,32 @@
 #include "header.h"
 #define INF 99999
-// A, 4 ,n ,0 ,2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2
+
+// Building a graph
 char build_graph_cmd(node **head) // A
 {
 	int n_n;
 
 	char space;
-	scanf(" %d", &n_n); // 4
+	scanf(" %d", &n_n); 
 
-	int graph_size;
-	graph_size = n_n;
+	int graph_size = n_n;
 
-	if (graph_size == 0)
+	if (graph_size == 0) // if the amount of nodes is 0, it is not a graph
 	{
 		return 'k';
 	}
 
-	//   start to build the graph
-
+	// Setting the first node (node 0) manually
 	(*head)->node_num = 0;
 	(*head)->edges = NULL;
 	(*head)->next = NULL;
 
-	// neybears
 	node *temp;
 	temp = *head;
 
-	// the graph
+	// Creating all the other nodes, such that a LinkedList of nodes is recived.
 	for (int i = 1; i < graph_size; i++) {
-		node *Neighbor_node = NULL;
-		if ((Neighbor_node = (node *)malloc(sizeof(node))) == NULL) {
-			printf("Not enough memory, exit program\n");
-			exit(-1);
-		}
+		node *Neighbor_node = (node *)malloc(sizeof(node));
 
 		Neighbor_node->node_num = i;
 		Neighbor_node->edges = NULL;
@@ -41,13 +35,14 @@ char build_graph_cmd(node **head) // A
 		temp = temp->next;
 	}
 
+	// The next section is adding edges for each node
 	int num;
 	while (scanf(" %c", &space) == 1 && space == 'n')
 	{
 		scanf(" %d", &num);
 		node *n = *head;
 
-		for (size_t i = 0; i < num; i++)
+		for (int i = 0; i < num; i++)
 		{
 			n = n->next;
 		}
@@ -57,25 +52,21 @@ char build_graph_cmd(node **head) // A
 
 		while (scanf(" %d %d", &x, &w) == 2)
 		{
-			// find x
+			// Find the current node
 			node *endpoint = *head;
 			for (size_t i = 0; i < x; i++)
 			{
 				endpoint = endpoint->next;
 			}
 
-			// create edge
-			edge *Neighbor_ed = NULL;
-			if ((Neighbor_ed = (edge *)malloc(sizeof(edge))) == NULL)
-			{
-				printf("Not enough memory, exit program\n");
-				exit(-1);
-			}
+			// Creating an edge
+			edge *Neighbor_ed = (edge *)malloc(sizeof(edge));
 
 			Neighbor_ed->endpoint = endpoint;
 			Neighbor_ed->weight = w;
 
-			// add edge
+
+			// Adding the created edge to the current node
 			*next = Neighbor_ed;
 			next = &(Neighbor_ed->next);
 		}
@@ -85,7 +76,7 @@ char build_graph_cmd(node **head) // A
 	return space;
 }
 
-/********************************************************************************************************/
+// Inserting a new node to the graph, or editing existing one
 void insert_node_cmd(node **head) // B
 {
 	int new_node_data; // the new data
@@ -160,8 +151,7 @@ void insert_node_cmd(node **head) // B
 	}
 }
 
-/****************************************************************************************************************************************/
-
+// Delete a given node, including all the edges that are coming from it and get into it
 void delete_node_cmd(node **head) // D
 {
 	node *temp_no;
@@ -171,11 +161,11 @@ void delete_node_cmd(node **head) // D
 	scanf(" %d", &data_delete);
 
 
-	// first we delete the edges that theirs enpoints is the deleted Node.
+	// Delete the edges that theirs enpoints is the deleted Node.
 	while (temp_no != NULL)
 	{
 
-		// First we checks an edge case when a Node (or several) has no edges. 
+		// Checks an edge case when a Node (or several) has no edges. 
 		if (temp_no->edges == NULL) {
 			while (temp_no->edges == NULL) {
 				temp_no = temp_no->next;
@@ -194,7 +184,7 @@ void delete_node_cmd(node **head) // D
 			printf("Node %d is nulll\n", temp_no->node_num);
 		}
 
-		// head case
+		// Head case - when the first element in the LinkedList shall be removed
 		if (temp_ed->endpoint != NULL && data_delete == temp_ed->endpoint->node_num)
 		{
 			edge *del_ed;
@@ -205,6 +195,7 @@ void delete_node_cmd(node **head) // D
 			del_ed = NULL;
 		}
 
+		// "Normal" case - when an element (not first or last) in the LinkedList shall be removed
 		while (temp_ed->next != NULL && temp_ed->next->next != NULL)
 		{
 			if (data_delete == temp_ed->next->endpoint->node_num)
@@ -219,8 +210,8 @@ void delete_node_cmd(node **head) // D
 
 			temp_ed = temp_ed->next;
 		}
-		// tail case
 
+		// Tead case - when the last elemnt in the LinkedList shall be removed
 		if (temp_ed->next != NULL && data_delete == temp_ed->next->endpoint->node_num)
 		{
 			edge *tail;
@@ -269,44 +260,37 @@ void delete_node_cmd(node **head) // D
 	}
 }
 
-/*******************************************************************************************************************************************/
+// Deleting and "free" any node and edge of the graph.
 void deleteGraph_cmd(node **head) {
-    node *temp_no;
-    temp_no = *head;
+    node *temp_no, *del_point_node;
+    edge *temp_ed, *del_ed;
 
     // Iterate through all the nodes in the graph
+    temp_no = *head;
     while (temp_no != NULL) {
-        edge *temp_ed;
         temp_ed = temp_no->edges;
 
         // Iterate through all the edges connected to the current node
         while (temp_ed != NULL) {
-            edge *del_ed;
-            temp_no->edges = temp_no->edges->next;
             del_ed = temp_ed;
             temp_ed = temp_ed->next;
             free(del_ed);
-			del_ed = NULL;
         }
 
-        node *del_point_node;
         del_point_node = temp_no;
-
-        (*head) = (*head)->next;
         temp_no = temp_no->next;
 
         // Remove the node from the graph
         if (del_point_node != *head) {
             free(del_point_node);
-			del_point_node = NULL;
         }
     }
 
     // Reset the head pointer
-    *head = NULL;
+    head = NULL;
 }
-/******************************************************************************************************************************************/
 
+// A function that scans inputs and send to dijkstra
 void shortsPath_cmd(node *head)
 {
 	int s = 0, t = 0;
@@ -315,8 +299,7 @@ void shortsPath_cmd(node *head)
 	dijkstra(head, s,t);
 }
 
-/******************************************************************************************************************************************/
-
+// Calculating the least heavy path from node S to node D by dijkstra's algorithm
 void dijkstra(node *head, int start, int end) {
     node *temp = head;
     int numNodes = 0;
@@ -342,80 +325,7 @@ void dijkstra(node *head, int start, int end) {
 
     // Create a min heap to store the unvisited nodes
     int heapSize = numNodes;
-    node** heap = (node**)calloc(heapSize, sizeof(node*));
-    temp = head;
-    for(int i = 0; i < heapSize; i++){
-        heap[i] = temp;
-        temp = temp->next;
-    }
-
-    while (heapSize > 0) {
-        // Extract the node with the smallest distance from the min heap
-        node *curr = heap[0];
-        int currIndex = 0;
-        for (int i = 1; i < heapSize; i++) {
-            if (heap[i]->delta < curr->delta) {
-                curr = heap[i];
-                currIndex = i;
-            }
-        }
-        node *temp = heap[currIndex];
-        heap[currIndex] = heap[heapSize - 1];
-        heap[heapSize - 1] = temp;
-        heapSize--;
-
-        // Update the distances of the neighboring nodes
-        edge *currEdge = curr->edges;
-        while (currEdge != NULL) {
-            int newDist = curr->delta + currEdge->weight;
-            if (newDist < currEdge->endpoint->delta && newDist != INF) {
-                currEdge->endpoint->delta = newDist;
-				heap = (node**)realloc(heap, sizeof(node*) * (heapSize + 1));
-                heap[heapSize] = currEdge->endpoint;
-                heapSize++;
-            }
-            currEdge = currEdge->next;
-        }
-    }
-    temp = head;
-    while (temp != NULL && temp->node_num != end) {
-        temp = temp->next;
-    }
-    if (temp == NULL) {
-        printf("-1\n");
-    } else {
-            printf("Dijkstra shortest path: %d\n ", temp->delta); // space or not spcae??
-	}
-}
-
-/******************************************************************************************************************************************/
-
-int dijkstraInteger(node *head, int start, int end) {
-    node *temp = head;
-    int numNodes = 0;
-    while(temp != NULL){
-        numNodes++;
-        temp = temp->next;
-    }
-    temp = head;
-
-    // Initialize the distance of all nodes to infinity
-    while (temp != NULL) {
-        temp->delta = INF;
-        temp = temp->next;
-    }
-    // Set the distance of the start node to 0
-    temp = head;
-    while (temp != NULL && temp->node_num != start) {
-        temp = temp->next;
-    }
-    if (temp != NULL) {
-        temp->delta = 0;
-    }
-
-    // Create a min heap to store the unvisited nodes
-    int heapSize = numNodes;
-	node** heap = (node**)calloc(heapSize, sizeof(node*));
+	node** heap = (node**)malloc(heapSize * sizeof(node*));    
 	temp = head;
     for(int i = 0; i < heapSize; i++){
         heap[i] = temp;
@@ -443,7 +353,7 @@ int dijkstraInteger(node *head, int start, int end) {
             int newDist = curr->delta + currEdge->weight;
             if (newDist < currEdge->endpoint->delta && newDist != INF) {
                 currEdge->endpoint->delta = newDist;
-				heap = (node**)realloc(heap, sizeof(node*) * (heapSize + 1));
+				heap = (node**)realloc(heap, (heapSize + 1) * sizeof(node*));
                 heap[heapSize] = currEdge->endpoint;
                 heapSize++;
             }
@@ -454,14 +364,86 @@ int dijkstraInteger(node *head, int start, int end) {
     while (temp != NULL && temp->node_num != end) {
         temp = temp->next;
     }
+	free(heap);
     if (temp == NULL) {
-        return -1;
+        printf("-1\n");
     } else {
-            return temp->delta; // space or not spcae??
+            printf("Dijkstra shortest path: %d \n", temp->delta); // space or not spcae??
 	}
 }
 
-/*************************************************************************************************************************************/
+int dijkstraInteger(node *head, int start, int end) {
+    node *temp = head;
+    int numNodes = 0;
+    while(temp != NULL){
+        numNodes++;
+        temp = temp->next;
+    }
+    temp = head;
+
+    // Initialize the distance of all nodes to infinity
+    while (temp != NULL) {
+        temp->delta = INF;
+        temp = temp->next;
+    }
+    // Set the distance of the start node to 0
+    temp = head;
+    while (temp != NULL && temp->node_num != start) {
+        temp = temp->next;
+    }
+    if (temp != NULL) {
+        temp->delta = 0;
+    }
+
+    // Create a min heap to store the unvisited nodes
+    int heapSize = numNodes;
+	node** heap = (node**)malloc(heapSize * sizeof(node*));
+	temp = head;
+    for(int i = 0; i < heapSize; i++){
+        heap[i] = temp;
+        temp = temp->next;
+    }
+
+    while (heapSize > 0) {
+        // Extract the node with the smallest distance from the min heap
+        node *curr = heap[0];
+        int currIndex = 0;
+        for (int i = 1; i < heapSize; i++) {
+            if (heap[i]->delta < curr->delta) {
+                curr = heap[i];
+                currIndex = i;
+            }
+        }
+        node *temp = heap[currIndex];
+        heap[currIndex] = heap[heapSize - 1];
+        heap[heapSize - 1] = temp;
+        heapSize--;
+
+        // Update the distances of the neighboring nodes
+        edge *currEdge = curr->edges;
+        while (currEdge != NULL) {
+            int newDist = curr->delta + currEdge->weight;
+            if (newDist < currEdge->endpoint->delta && newDist != INF) {
+                currEdge->endpoint->delta = newDist;
+				heap = (node**)realloc(heap, (heapSize + 1) * sizeof(node*));
+                heap[heapSize] = currEdge->endpoint;
+                heapSize++;
+            }
+            currEdge = currEdge->next;
+        }
+    }
+    temp = head;
+    while (temp != NULL && temp->node_num != end) {
+        temp = temp->next;
+    }
+
+	free(heap);
+    if (temp == NULL) {
+        return -1;
+    } else {
+            return temp->delta;
+	}
+}
 
 void TSP_cmd(node *head)
 {
@@ -488,65 +470,12 @@ void TSP_cmd(node *head)
 	min_path = NULL;
 }
 
-/**************************************************************************************************************************************/
-int Dir(node *head, int t, int s)
-{
-	node *temp_no;
-	temp_no = head;
-	node *s_start;
-	node *wanted;
-
-	// the start - inf all the ways exept the first one
-	while (temp_no != NULL)
-	{
-		temp_no->delta = INF;
-
-		if (temp_no->node_num == s)
-		{
-			temp_no->delta = 0;
-			s_start = temp_no;
-		}
-
-		temp_no = temp_no->next;
-	}
-
-	edge *neb_ed;
-	while (s_start->edges != NULL)
-	{
-		neb_ed = s_start->edges;
-
-		while (neb_ed != NULL)
-		{
-			if (neb_ed->weight <= neb_ed->endpoint->delta)
-			{
-				neb_ed->endpoint->delta = ((s_start->delta) + (neb_ed->weight));
-			}
-
-			neb_ed = neb_ed->next;
-		}
-		s_start = s_start->edges->next->endpoint;
-	}
-	wanted = head;
-	while (wanted->next != NULL && wanted->node_num != t)
-	{
-		wanted = wanted->next;
-	}
-
-	if (wanted->delta == INF)
-	{
-		return -1;
-	}
-
-	return (wanted->delta);
-}
-/**************************************************************************************************************************************/
 void swap(int *a, int *b)
 {
 	int temp = *a;
 	*a = *b;
 	*b = temp;
 }
-/**************************************************************************************************************************************/
 
 void permute(int *a, int l, int r, int size, node *head, int *min_path)
 {

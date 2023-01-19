@@ -29,7 +29,6 @@ void deleteGraph_cmd(node **);
 
 void shortsPath_cmd(node *);
 void TSP_cmd(node *);
-int Dir(node *, int, int);
 
 void swap(int *, int *);
 void permute(int *, int, int, int, node *, int *);
