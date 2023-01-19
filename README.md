@@ -2,12 +2,12 @@
 
 This program is a command line tool that allows the user to create and manipulate a graph. The graph is implemented as a linked list of nodes, where each node has a unique integer identifier and a list of edges to other nodes. Each edge has a weight representing the distance or cost between the two nodes it connects. The program supports the following commands:
 
-    A: Build a new graph by specifying the number of nodes and the edges between them.
-    B: Insert a new node into the existing graph.
-    D: Delete a node from the existing graph.
-    P: Print the current state of the graph.
-    S: Calculate the shortest path between two nodes using Dijkstra's algorithm.
-    T: Calculate the shortest path of "travelling salesman problem" (TSP) in the graph.
+* A: Build a new graph by specifying the number of nodes and the edges between them.
+* B: Insert a new node into the existing graph.
+* D: Delete a node from the existing graph.
+* P: Print the current state of the graph.
+* S: Calculate the shortest path between two nodes using Dijkstra's algorithm.
+* T: Calculate the shortest path of "travelling salesman problem" (TSP) in the graph.
 
 ## Usage
 
@@ -23,23 +23,23 @@ For example (if given an input in input.txt file):
 
 The input for each command is as follows:
 
-    A: The first input is the number of nodes in the graph, followed by one or more lines where each line starts with the letter 'n' and an integer, followed by one or more pairs of integers representing the end node and weight of an edge.
-    B: A single integer representing the identifier of the node to insert.
-    D: A single integer representing the identifier of the node to delete.
-    S: Two integers representing the start and end nodes of the path to calculate.
-    T: An integer k and then k diffrent integers, representing the required nodes.
-    P: no input needed.
+* A: The first input is the number of nodes in the graph, followed by one or more lines where each line starts with the letter 'n' and an integer, followed by one or more pairs of integers representing the end node and weight of an edge.
+* B: A single integer representing the identifier of the node to insert.
+* D: A single integer representing the identifier of the node to delete.
+* S: Two integers representing the start and end nodes of the path to calculate.
+* T: An integer k and then k diffrent integers, representing the required nodes.
+* P: no input needed.
 
 ## Output
 
 The output for each command is as follows:
 
-    A: No output.
-    B: No output.
-    D: No output.
-    S: The shortest path distance from the start node to the end node as an integer. If no path exists, -1 is printed.
-    T: The length of the shortest Hamiltonian cycle, if it exists. If no such cycle exists, -1 is printed.
-    P: A list of the nodes and their edges in the format "Node #X: w(X,Y) = Z, w(X,Y) = Z,..." where X is the identifier of the node, Y is the identifier of an endpoint of an edge, and Z is the weight of the edge.
+* A: No output.
+* B: No output.
+* D: No output.
+* S: The shortest path distance from the start node to the end node as an integer. If no path exists, -1 is printed.
+* T: The length of the shortest Hamiltonian cycle, if it exists. If no such cycle exists, -1 is printed.
+* P: A list of the nodes and their edges in the format "Node #X: w(X,Y) = Z, w(X,Y) = Z,..." where X is the identifier of the node, Y is the identifier of an endpoint of an edge, and Z is the weight of the edge.
 
 ## Example
 
